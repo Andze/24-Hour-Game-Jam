@@ -16,6 +16,7 @@ public class PlayerMove : MonoBehaviour
     private Vector3 velocity;
     private Vector3 respawnPoint;
     private KeyCode[] inputKeys;
+    private bool Grounded;
 
     void Start()
     {
@@ -28,7 +29,7 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        float moveHorizontal = 0.0f, moveVertical = 0.0f;
+        float moveHorizontal = 0.0f, moveVertical = 0.0f, Jump = 0.0f;
 
         if (Input.GetKey(inputKeys[0]))
             moveVertical += 1.0f;
@@ -40,7 +41,17 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKey(inputKeys[3]))
             moveHorizontal += 1.0f;
 
-        Vector3 velocity = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        if (Input.GetKeyDown(inputKeys[4]))
+        {  
+            //if not in the air
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.26f))
+            {
+                Jump += 25.0f;
+            }               
+        }
+
+       Vector3 velocity = new Vector3(moveHorizontal, Jump, moveVertical);
         rigidBody.AddForce(velocity * moveSpeed);
     }
 
