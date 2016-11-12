@@ -14,9 +14,7 @@ public class PlayerPaint : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(Camera.main.name);
         targetLayerMask = LayerMask.GetMask("Floor");
-
         Paint();
     }
 
