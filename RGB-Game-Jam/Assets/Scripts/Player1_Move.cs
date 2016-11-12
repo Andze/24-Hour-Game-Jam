@@ -36,6 +36,6 @@ public class Player1_Move : MonoBehaviour {
     void Respawn()
     {
         myRigidbody.velocity = Vector3.zero;
-        transform.position = new Vector3(0, 1, 0);
+        transform.position = new Vector3(-6.75f, 3f, 6.75f);
     }
 }
