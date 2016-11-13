@@ -28,7 +28,7 @@ public class BuffScript : MonoBehaviour
         this.cooldownTime = cooldownTime;
     }
 
-    void Update()
+    public virtual void Update()
     {
         if (active)
         {
