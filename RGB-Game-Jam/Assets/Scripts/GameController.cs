@@ -6,6 +6,8 @@ public class GameController : MonoBehaviour
 {
     public Camera cameraTarget;
     public int granularity = 100;
+    public float matchTime = 120.0f;
+    public float remainingTime { get; private set; }
 
     public float rScore { get; private set; }
     public float gScore { get; private set; }
@@ -29,12 +31,16 @@ public class GameController : MonoBehaviour
         arraySize = granularity * granularity;
         colorRaw = Vector3.zero;
         greyCompensation = Vector3.zero;
+
+        remainingTime = matchTime;
     }
 
     void Update()
     {
         CalculateScores();
         DisplayScoreHUD();
+
+        remainingTime -= Time.deltaTime;
     }
 
     private void CalculateScores()

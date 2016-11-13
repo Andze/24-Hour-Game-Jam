@@ -48,11 +48,12 @@ public class PlayerMove : MonoBehaviour
             moveHorizontal += 1.0f;
 
         if (Input.GetKeyDown(inputKeys[4]))
-        {  
-            if (!inAir)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.26f))
             {
                 rigidBody.AddForce(new Vector3(0.0f, jumpForce, 0.0f));
-
+                
                 inAir = true;
             }
         }
@@ -78,6 +79,8 @@ public class PlayerMove : MonoBehaviour
     {
         rigidBody.velocity = Vector3.zero;
         transform.position = respawnPoint;
+        airTime = 0.0f;
+        inAir = true;
     }
 
     private void SetControlScheme()
