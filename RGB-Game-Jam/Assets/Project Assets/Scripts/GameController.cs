@@ -52,15 +52,16 @@ public class GameController : MonoBehaviour
             case GameState.MainMenu:
                 break;
             case GameState.Playing:
-                CalculateScores();
                 remainingTime -= Time.deltaTime;
 
                 if (remainingTime <= 0.0f)
                 {
                     remainingTime = 0.0f;
-
+                    
+                    CalculateScores();
                     gameContainer.SetActive(false);
                     GetComponent<ScoreDisplay>().ShowScore();
+                    gameState = GameState.GameOver;
                 }
                 break;
             case GameState.GameOver:
@@ -88,12 +89,12 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (greyCompensation == Vector3.zero)
-        {
-            if (colorRaw.x > 0.0f || colorRaw.y > 0.0f || colorRaw.z > 0.0f)
-                greyCompensation = colorRaw;
-        }
-        else SetScores();
+        //if (greyCompensation == Vector3.zero)
+        //{
+        //    if (colorRaw.x > 0.0f || colorRaw.y > 0.0f || colorRaw.z > 0.0f)
+        //        greyCompensation = colorRaw;
+        //}
+        SetScores();
     }
     
     private Texture2D RTtoT2D()
@@ -108,7 +109,7 @@ public class GameController : MonoBehaviour
 
     private void SetScores()
     {
-        colorRaw = (colorRaw - greyCompensation) / 100.0f;
+        colorRaw = colorRaw / 100.0f;// - greyCompensation) / 100.0f;
 
         rScore = colorRaw.x;
         gScore = colorRaw.y;

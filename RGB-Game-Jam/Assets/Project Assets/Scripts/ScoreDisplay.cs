@@ -49,15 +49,15 @@ public class ScoreDisplay : MonoBehaviour
 
     public void ShowScore()
     {
-        AdjustScoreDisplay(0, gController.rScore);
-        AdjustScoreDisplay(1, gController.gScore);
-        AdjustScoreDisplay(2, gController.bScore);
-
         for (int i = 0; i < scoreSprites.Length; i++)
         {
             scoreSprites[i].SetActive(true);
             scoreText[i].SetActive(true);
         }
+        
+        AdjustScoreDisplay(0, gController.rScore);
+        AdjustScoreDisplay(1, gController.gScore);
+        AdjustScoreDisplay(2, gController.bScore);
     }
     
     void Update()
@@ -142,7 +142,7 @@ public class ScoreDisplay : MonoBehaviour
     {
         float scorePerc = value / gController.GetTotalScore();
         Vector2 newDimensions = new Vector2(maxScale * scorePerc, maxScale * scorePerc);
-        
+
         scoreSprites[index].GetComponent<RectTransform>().sizeDelta = newDimensions;
         scoreText[index].GetComponent<RectTransform>().sizeDelta = newDimensions;
         scoreText[index].GetComponent<Text>().text = (scorePerc * 100.0f).ToString("0") + "%";
