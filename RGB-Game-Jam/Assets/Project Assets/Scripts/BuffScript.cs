@@ -6,19 +6,25 @@ public class BuffScript : MonoBehaviour
 {
     public float cooldownTime = 30.0f;
     protected bool active = false;
+    private float respawnTime = 0.0f;
+    private MeshRenderer renderer;
 
     void Start()
     {
         if (!active)
             GetComponent<Collider>().isTrigger = true;
+
+        renderer = GetComponent<MeshRenderer>();
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (!active && other.gameObject.tag == "Player")
+        if (respawnTime == 0.0f && !active && other.gameObject.tag == "Player")
         {
             Instance(other.gameObject).Activate(cooldownTime);
-            Destroy(this.gameObject);
+
+            respawnTime = 10.0f;
+            renderer.enabled = false;
         }
     }
 
@@ -30,6 +36,17 @@ public class BuffScript : MonoBehaviour
 
     public virtual void Update()
     {
+        if (respawnTime != 0.0f)
+        {
+            respawnTime -= Time.deltaTime;
+
+            if (respawnTime <= 0.0f)
+            {
+                respawnTime = 0.0f;
+                renderer.enabled = true;
+            }
+        }
+
         if (active)
         {
             cooldownTime -= Time.deltaTime;
