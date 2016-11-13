@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerMove : MonoBehaviour
 {
     public float moveSpeed = 5.0f;
+    public float jumpForce = 200.0f;
     public enum ControllerSet
     {
         WASD,
@@ -31,10 +32,10 @@ public class PlayerMove : MonoBehaviour
 
         SetControlScheme();
     }
-
+    
     void FixedUpdate()
     {
-        float moveHorizontal = 0.0f, moveVertical = 0.0f, Jump = 0.0f;
+        float moveHorizontal = 0.0f, moveVertical = 0.0f;
 
         if (Input.GetKey(inputKeys[0]))
             moveVertical += 1.0f;
@@ -48,20 +49,25 @@ public class PlayerMove : MonoBehaviour
 
         if (Input.GetKeyDown(inputKeys[4]))
         {  
-            //if not in the air
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.26f))
+            if (!inAir)
             {
-                Jump += 200.0f;
+                rigidBody.AddForce(new Vector3(0.0f, jumpForce, 0.0f));
+
+                inAir = true;
             }
         }
 
-       Vector3 velocity = new Vector3(moveHorizontal * moveSpeed, Jump, moveVertical * moveSpeed);
+       Vector3 velocity = new Vector3(moveHorizontal * moveSpeed, 0.0f, moveVertical * moveSpeed);
         rigidBody.AddForce(velocity);
     }
 
+    float airTime = 0.0f;
+    bool inAir = true;
     void Update()
     {
+        if (inAir)
+            airTime += Time.deltaTime;
+
         if (transform.position.y <= deathHeight)
         {
             Respawn();
@@ -101,7 +107,11 @@ public class PlayerMove : MonoBehaviour
         if (other.gameObject.tag == "Floor")
         {
             if (pp)
-                pp.Paint(pp.brushSize * 2.0f);
+            {
+                pp.Paint(pp.brushSize * (1.0f + (airTime * 1.5f)));
+                inAir = false;
+                airTime = 0.0f;
+            }
 
             if (particles)
                 particles.Play(pp.brushColor);
