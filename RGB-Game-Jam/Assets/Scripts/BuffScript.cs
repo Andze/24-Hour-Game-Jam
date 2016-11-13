@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 
-[RequireComponent(typeof(Collider))]
 public class BuffScript : MonoBehaviour
 {
     public float cooldownTime = 30.0f;

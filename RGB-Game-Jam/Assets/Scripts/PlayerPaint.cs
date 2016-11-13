@@ -9,22 +9,23 @@ public class PlayerPaint : MonoBehaviour
     public Camera canvasCamera;
 
     private Vector3 positionLastPaint;
-    private float brushSize = 0.05f;
+    private float _brushSize = 0.05f;
+    public float brushSize { get { return _brushSize; } private set { } }
     private int targetLayerMask = 0;
 
     void Start()
     {
         targetLayerMask = LayerMask.GetMask("Floor");
-        Paint();
+        Paint(_brushSize);
     }
 
     void Update()
     {
         if (Vector3.Distance(transform.position, positionLastPaint) > minPaintDistance)
-            Paint();
+            Paint(_brushSize);
     }
 
-    private void Paint()
+    public void Paint(float brushSize)
     {
         positionLastPaint = transform.position;
 
@@ -43,7 +44,7 @@ public class PlayerPaint : MonoBehaviour
     private bool GetUVWorldPosition(ref Vector3 uvWorldPosition)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, transform.localScale.y * 2.0f, targetLayerMask))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, transform.lossyScale.y, targetLayerMask))
         {
             MeshCollider mC = hit.collider as MeshCollider;
             if (mC == null || mC.sharedMesh == null)

@@ -16,13 +16,18 @@ public class PlayerMove : MonoBehaviour
     private Vector3 velocity;
     private Vector3 respawnPoint;
     private KeyCode[] inputKeys;
-    private bool Grounded;
+    private PlayerPaint pp;
+    private ParticlePlayer particles;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         deathHeight = -5.0f;
         respawnPoint = transform.position;
+        pp = GetComponent<PlayerPaint>();
+        particles = GetComponent<ParticlePlayer>();
+        if (particles && pp)
+            particles.color = pp.brushColor;
 
         SetControlScheme();
     }
@@ -47,12 +52,12 @@ public class PlayerMove : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.26f))
             {
-                Jump += 25.0f;
-            }               
+                Jump += 200.0f;
+            }
         }
 
-       Vector3 velocity = new Vector3(moveHorizontal, Jump, moveVertical);
-        rigidBody.AddForce(velocity * moveSpeed);
+       Vector3 velocity = new Vector3(moveHorizontal * moveSpeed, Jump, moveVertical * moveSpeed);
+        rigidBody.AddForce(velocity);
     }
 
     void Update()
@@ -88,6 +93,18 @@ public class PlayerMove : MonoBehaviour
             inputKeys[2] = KeyCode.DownArrow;
             inputKeys[3] = KeyCode.RightArrow;
             inputKeys[4] = KeyCode.RightShift;
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Floor")
+        {
+            if (pp)
+                pp.Paint(pp.brushSize * 2.0f);
+
+            if (particles)
+                particles.Play(pp.brushColor);
         }
     }
 }
