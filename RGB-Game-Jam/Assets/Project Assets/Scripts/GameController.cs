@@ -49,8 +49,6 @@ public class GameController : MonoBehaviour
     {
         switch (gameState)
         {
-            case GameState.MainMenu:
-                break;
             case GameState.Playing:
                 remainingTime -= Time.deltaTime;
 
