@@ -5,6 +5,7 @@ using System.Collections;
 public class ScoreDisplay : MonoBehaviour
 {
     public Canvas hudTarget;
+    public GameObject exitBtn;
     
     private GameObject[] scoreSprites;
     private GameObject[] scoreText;
@@ -44,6 +45,7 @@ public class ScoreDisplay : MonoBehaviour
         {
             scoreSprites[i].SetActive(false);
             scoreText[i].SetActive(false);
+            if (exitBtn) exitBtn.SetActive(false);
         }
     }
 
@@ -53,6 +55,7 @@ public class ScoreDisplay : MonoBehaviour
         {
             scoreSprites[i].SetActive(true);
             scoreText[i].SetActive(true);
+            if (exitBtn) exitBtn.SetActive(true);
         }
         
         AdjustScoreDisplay(0, gController.rScore);

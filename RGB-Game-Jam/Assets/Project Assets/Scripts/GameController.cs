@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 [RequireComponent(typeof(ScoreDisplay))]
@@ -47,24 +48,19 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        switch (gameState)
+        if (gameState == GameState.Playing)
         {
-            case GameState.Playing:
-                remainingTime -= Time.deltaTime;
+            remainingTime -= Time.deltaTime;
 
-                if (remainingTime <= 0.0f)
-                {
-                    remainingTime = 0.0f;
-                    
-                    CalculateScores();
-                    gameContainer.SetActive(false);
-                    GetComponent<ScoreDisplay>().ShowScore();
-                    gameState = GameState.GameOver;
-                }
-                break;
-            case GameState.GameOver:
-                
-                break;
+            if (remainingTime <= 0.0f)
+            {
+                remainingTime = 0.0f;
+
+                CalculateScores();
+                gameContainer.SetActive(false);
+                GetComponent<ScoreDisplay>().ShowScore();
+                gameState = GameState.GameOver;
+            }
         }
     }
 
@@ -119,5 +115,11 @@ public class GameController : MonoBehaviour
     public float GetTotalScore()
     {
         return rScore + gScore + bScore;
+    }
+
+    public void BackToMainMenu()
+    {
+        if (gameState == GameState.GameOver)
+            SceneManager.LoadScene(0);
     }
 }
